@@ -7,4 +7,4 @@ To function you need an esp8266 or esp32 board, a SH1306 or SH1106 display and t
 
 Loading into the board is done via Arduino IDE / Загрузка в плату проводится через Arduino IDE
 
-Version A001 / Версия А001
+Version A001 / Версия А002
