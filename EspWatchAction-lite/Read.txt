@@ -1,2 +1,0 @@
-Облегченный код для работы без кнопок, только плата и дисплей (отображение времени, даты, дня недели и wifi)
-Lightweight code for working without buttons, only board and display (display time, date, day, week and wifi)
