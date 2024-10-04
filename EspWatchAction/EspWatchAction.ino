@@ -260,7 +260,7 @@ if (menuDisplayed && digitalRead(displayOnButtonPin) == LOW) {
     buttonD5Pressed = true;
     buttonD6Pressed = true;
 
-    if (millis() - buttonPressStart >= 3000) {
+    if (millis() - buttonPressStart >= 1500) {
     display.clearDisplay();
     display.setTextSize(1); // Размер текста 1
     display.setTextColor(SSD1306_WHITE);
