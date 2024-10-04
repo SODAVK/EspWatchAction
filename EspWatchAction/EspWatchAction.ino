@@ -6,15 +6,17 @@
 #include <Adafruit_SSD1306.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include <ESP8266WiFi.h>  // или #include <WiFi.h> для ESP32
-#include <ESP8266HTTPClient.h>
+//#include <ESP8266WiFi.h>  // 
+#include <WiFi.h> для ESP32
+//#include <ESP8266HTTPClient.h>
+#include <HTTPClient.h>
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
 #include "MenuDisplay.h"
 
 // Настройки Wi-Fi, впишите свои точки WIFI и их пароли - (НУЖНО ИЗМЕНИТЬ)
-const char* ssidList[] = {"wifi0", "wifi1", "wifi2"};  // Массив с SSID
-const char* passwordList[] = {"pass0", "pass1", "pass2"};  // Массив с паролями
+const char* ssidList[] = {"EspWatchAction", "wifi1", "wifi2"};  // Массив с SSID
+const char* passwordList[] = {"12345678", "pass1", "pass2"};  // Массив с паролями
 const int numWiFiNetworks = sizeof(ssidList) / sizeof(ssidList[0]);  // Количество сетей
 
 // Настройки дисплея sh1306 I2C
@@ -23,9 +25,9 @@ const int numWiFiNetworks = sizeof(ssidList) / sizeof(ssidList[0]);  // Коли
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 // Настройки кнопок
-const int weatherButtonPin = D5; // Кнопка для погоды
-const int textButtonPin = D6;    // Кнопка для текста
-const int displayOnButtonPin = D7; // Кнопка для включения дисплея
+const int weatherButtonPin = 18; // Кнопка для погоды D5 / for esp32 GPIO18
+const int textButtonPin = 19;    // Кнопка для текста D6 / for esp32 GPIO19
+const int displayOnButtonPin = 23; // Кнопка для включения дисплея D7 /for esp32 GPIO23
 bool weatherButtonPressed = false;
 bool textButtonPressed = false;
 bool displayOff = false; // Флаг, показывающий, отключен ли дисплей
@@ -33,7 +35,7 @@ unsigned long lastInteractionTime = 0;  // Время последнего вз�
 const unsigned long inactivityPeriod = 60000;  // Период бездействия 1 минута
 
 // Настройки OpenWeatherMap - (НУЖНО ИЗМЕНИТЬ)
-const String apiKey = "API OpenWeatherMap"; // Зарегестрируйтесь на сайте https://openweathermap.org/ и получите свой API
+const String apiKey = "38498a725609bc5a11e3261b341ab7f7"; // Зарегестрируйтесь на сайте https://openweathermap.org/ и получите свой API
 const String city = "Moscow";  // Название города также найдите свой город на https://openweathermap.org/ и вставте сюда
 const String units = "metric"; // Для отображения в градусах Цельсия
 
@@ -66,7 +68,7 @@ const int menuDelays[] = {1, 500, 500, 500, 500, 500}; // Примерные з�
 
 void setup() {
   // Инициализация I2C с указанием пинов SDA и SCL
-  Wire.begin(D1, D2); // SDA -> D1, SCL -> D2  
+  Wire.begin(21, 22); // SDA -> D1, SCL -> D2  /for esp32 GPIO21 and GPIO22
 
   // Инициализация дисплея
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -614,7 +616,7 @@ void displayText() {
   // Определяем размеры текста для его центрирования
   int16_t x1, y1;
   uint16_t textWidth, textHeight;
-  String text = "by SoDaVk"; // Текст для отображения - (МОЖНО ИЗМЕНИТЬ НА СВОЙ ТЕКСТ)
+  String text = "v.A002"; // Текст для отображения - (МОЖНО ИЗМЕНИТЬ НА СВОЙ ТЕКСТ)
   display.getTextBounds(text, 0, 0, &x1, &y1, &textWidth, &textHeight);
   
   // Вычисляем позицию по центру экрана

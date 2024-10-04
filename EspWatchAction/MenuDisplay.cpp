@@ -37,7 +37,7 @@ void displayTextForMenuItem() {
         }
 
         case 1: {  // Info (Центрируем текст)
-            const char* text = "sodavk.tilda.ws";
+            const char* text = "by SoDaVk";
             int16_t x1, y1;
             uint16_t w, h;
             
