@@ -1,4 +1,4 @@
-//Код написан и распростроняется by SoDaVk (version A001)
+//Код написан и распростроняется by SoDaVk (version A003)
 //Не меняйте ничего, где это не нужно, если не знаете наверняка что это
 //Обязательно впишите свои данные WiFi и API ключ для погоды, необязательно можно изменить время (по умолчанию время по МСК) и текст (функция отображения текста в самом низу кода)
 #include <Wire.h>
@@ -6,10 +6,10 @@
 #include <Adafruit_SSD1306.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-//#include <ESP8266WiFi.h>  // 
-#include <WiFi.h> для ESP32
-//#include <ESP8266HTTPClient.h>
-#include <HTTPClient.h>
+#include <ESP8266WiFi.h>  // поменять на WiFi.h если у вас esp32
+//#include <WiFi.h>
+#include <ESP8266HTTPClient.h> // поменять на HTTPClient.h если у вас esp32
+//#include <HTTPClient.h>
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
 #include "MenuDisplay.h"
@@ -35,7 +35,7 @@ unsigned long lastInteractionTime = 0;  // Время последнего вз�
 const unsigned long inactivityPeriod = 60000;  // Период бездействия 1 минута
 
 // Настройки OpenWeatherMap - (НУЖНО ИЗМЕНИТЬ)
-const String apiKey = "38498a725609bc5a11e3261b341ab7f7"; // Зарегестрируйтесь на сайте https://openweathermap.org/ и получите свой API
+const String apiKey = "38498a725609bc5a11e3261b341ab7f7"; // Зарегестрируйтесь на сайте https://openweathermap.org/ и получите свой API (или используйте общий)
 const String city = "Moscow";  // Название города также найдите свой город на https://openweathermap.org/ и вставте сюда
 const String units = "metric"; // Для отображения в градусах Цельсия
 
@@ -65,6 +65,9 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 10800, 1800000); // 10800 секу�
 
 // Определите массив задержек для каждого пункта меню
 const int menuDelays[] = {1, 500, 500, 500, 500, 500}; // Примерные значения в миллисекундах
+
+// Размер куба
+int cubeSize = 32; // Изменяет размер куба в px
 
 void setup() {
   // Инициализация I2C с указанием пинов SDA и SCL
@@ -260,7 +263,7 @@ if (menuDisplayed && digitalRead(displayOnButtonPin) == LOW) {
     buttonD5Pressed = true;
     buttonD6Pressed = true;
 
-    if (millis() - buttonPressStart >= 1500) {
+    if (millis() - buttonPressStart >= 3000) {
     display.clearDisplay();
     display.setTextSize(1); // Размер текста 1
     display.setTextColor(SSD1306_WHITE);
@@ -604,27 +607,54 @@ void displayWeather() {
 }
 
 
-// Функция для отображения текста
-void displayText() {
-  // Очистка дисплея
-  display.clearDisplay();
-  
-  // Устанавливаем размер текста и цвет
-  display.setTextSize(2); // Размер текста - (МОЖНО ИЗМЕНИТЬ, 1 - мелкий, 2 - крупный)
-  display.setTextColor(WHITE);
+// Функция для отображения рисунка и версии
+void drawCube() {
+    display.clearDisplay();
 
-  // Определяем размеры текста для его центрирования
-  int16_t x1, y1;
-  uint16_t textWidth, textHeight;
-  String text = "v.A002"; // Текст для отображения - (МОЖНО ИЗМЕНИТЬ НА СВОЙ ТЕКСТ)
-  display.getTextBounds(text, 0, 0, &x1, &y1, &textWidth, &textHeight);
-  
-  // Вычисляем позицию по центру экрана
-  int16_t centeredX = (SCREEN_WIDTH - textWidth) / 2;
-  int16_t centeredY = (SCREEN_HEIGHT - textHeight) / 2;
-  
-  // Устанавливаем курсор на центр экрана и выводим текст
-  display.setCursor(centeredX, centeredY);
-  display.print(text);
-  display.display();
+    // Центр экрана
+    int centerX = SCREEN_WIDTH / 2;
+    int centerY = SCREEN_HEIGHT / 2;
+
+    // Размер куба
+    int cubeSize = 30; // Можно настроить размер куба
+
+    // Расчет координат вершин куба
+    int x0 = centerX - cubeSize / 2;
+    int y0 = centerY - cubeSize / 2;
+
+    // Смещение для заднего квадрата
+    int offset = 8;
+
+    // Рисуем передний квадрат
+    display.drawRect(x0, y0, cubeSize, cubeSize, SSD1306_WHITE);
+
+    // Рисуем задний квадрат со смещением
+    display.drawRect(x0 + offset, y0 - offset, cubeSize, cubeSize, SSD1306_WHITE);
+
+    // Соединяем передний и задний квадраты
+    display.drawLine(x0, y0, x0 + offset, y0 - offset, SSD1306_WHITE);
+    display.drawLine(x0 + cubeSize, y0, x0 + cubeSize + offset, y0 - offset, SSD1306_WHITE);
+    display.drawLine(x0, y0 + cubeSize, x0 + offset, y0 + cubeSize - offset, SSD1306_WHITE);
+    display.drawLine(x0 + cubeSize, y0 + cubeSize, x0 + cubeSize + offset, y0 + cubeSize - offset, SSD1306_WHITE);
+
+    // Устанавливаем размер текста
+    display.setTextSize(1); // Размер текста
+    display.setTextColor(SSD1306_WHITE); // Цвет текста
+
+    // Получаем границы текста
+    int16_t x, y;
+    uint16_t textWidth, textHeight;
+    display.getTextBounds("v.A003", 0, 0, &x, &y, &textWidth, &textHeight); // (МОЖНО ИЗМЕНИТЬ "text")
+    
+    // Центрируем текст под кубом
+    display.setCursor(centerX - textWidth / 2, centerY + cubeSize / 2 + 6);
+    display.print("v.A003"); // Выводим текст (МОЖНО ИЗМЕНИТЬ "text")
+
+    // Отображаем результат
+    display.display();
+}
+
+void displayText() {
+  // Заменяем вывод текста на вывод куба
+  drawCube();
 }

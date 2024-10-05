@@ -1,4 +1,4 @@
-//Код написан и распростроняется by SoDaVk (version A001)
+//Код написан и распростроняется by SoDaVk (version A003)
 //Не меняйте ничего, где это не нужно, если не знаете наверняка что это
 #include "MenuDisplay.h"
 #include <Adafruit_SSD1306.h>

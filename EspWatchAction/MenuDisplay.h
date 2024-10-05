@@ -1,4 +1,4 @@
-//Код написан и распростроняется by SoDaVk (version A001)
+//Код написан и распростроняется by SoDaVk (version A003)
 //Не меняйте ничего, где это не нужно, если не знаете наверняка что это
 #ifndef MENUDISPLAY_H
 #define MENUDISPLAY_H
