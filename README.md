@@ -65,4 +65,4 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 
 Альфа и Бета тестеры: Salvadorial, SoDaVk
 
-Version A002 / Версия А002
+Version A003 / Версия А003
