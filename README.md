@@ -3,7 +3,7 @@ This project is in alpha testing state / Данный проект находи�
 Разработка, реализация и поддержка by SoDaVk
 
 <p align="center">
-  <img width="400" height="250" src="https://github.com/SODAVK/EspWatchAction/blob/main/Model.png">
+  <img width="450" height="500" src="https://github.com/SODAVK/EspWatchAction/blob/main/Model.png">
 </p>
 
 Введение: Данное ПО было написано на коленке в целях как можно глубже изучить возможности как arduino IDE, так и свои.
