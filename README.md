@@ -66,4 +66,4 @@ _https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp3
 Поддержка, помощь в разработке: ___Salvadorial___, ___So&ka___  
 Альфа и Бета тестеры: ___Salvadorial___, ___SoDaVk___, ___So&ka___
 
-#### Version A003 / Версия А003
+#### Version A003 / Версия А003 (разработка приостановлена)
